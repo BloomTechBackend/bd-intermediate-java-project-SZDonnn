@@ -30,14 +30,11 @@ public class Shell {
             "Please enter the orderId you would like to view the Promise History for.";
     private static final String UNKNOWN_ORDER_MESSAGE =
             "Unable to find any order data for orderId: %s. Please check your order id and try again.";
-
     private static final String INLINE_PROMPT = "> ";
 
     private PromiseHistoryClient promiseHistoryClient;
     private ATAUserHandler inputHandler;
 
-    // FIXME: Added to cause a problem with Spotbug
-    private String unusedPrivateString;
 
     /**
      * Constructs a Shell instance that will use the given service client.
@@ -56,24 +53,20 @@ public class Shell {
      *
      * @param args command line args (ignored).
      * */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Shell shell = new Shell(App.getPromiseHistoryClient(), new ATAUserHandler());
         shell.processCommandLineArgs(args);
 
-        try
-        {
-            do
-            {
+        try {
+            do {
                 System.out.println(shell.handleUserRequest());
             } while (shell.userHasAnotherRequest());
-        } catch (Exception e)
-        {
-            System.out.println("Error encountered. Exiting.");
+        } catch (Exception e) {
+            System.out.println("Unable to find any order data for orderId. Please check your order id and try again");
         }
-
         System.out.println("Thank you for using the Promise History CLI. Have a great day!\n\n");
     }
+
 
     /**
      * Handles a user request to fetch promise history for order IDs, and returns the text to display
