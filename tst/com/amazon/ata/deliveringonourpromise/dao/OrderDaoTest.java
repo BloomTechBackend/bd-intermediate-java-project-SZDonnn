@@ -1,17 +1,10 @@
 package com.amazon.ata.deliveringonourpromise.dao;
 
 import com.amazon.ata.deliveringonourpromise.App;
-import com.amazon.ata.deliveringonourpromise.deliverypromiseservice.DeliveryPromiseServiceClient;
 import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
 import com.amazon.ata.deliveringonourpromise.types.Order;
-import com.amazon.ata.deliveringonourpromise.types.OrderItem;
-import com.amazon.ata.ordermanipulationauthority.OrderResult;
-import com.amazon.ata.ordermanipulationauthority.OrderResultItem;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OrderDaoTest {
 
