@@ -66,9 +66,9 @@ public class Order {
     }
 
     /**
-     * Returns a list containing all of the order items in this order.
+     * Returns a list containing all the order items in this order.
      *
-     * @return a list containing all of the order items in this order
+     * @return a list containing all the order items in this order
      */
     public List<OrderItem> getCustomerOrderItemList() {
         return customerOrderItemList;

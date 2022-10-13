@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 public class OrderDaoTest {
 
-
     private OrderManipulationAuthorityClient omaClient = App.getOrderManipulationAuthorityClient();
     private OrderDao dao = new OrderDao(omaClient);
 

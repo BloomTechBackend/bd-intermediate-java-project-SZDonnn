@@ -208,7 +208,6 @@ public class PromiseDaoTest {
                 return promise;
             }
         }
-
         return null;
     }
 }

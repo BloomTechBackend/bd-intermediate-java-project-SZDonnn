@@ -17,7 +17,7 @@ import java.util.List;
 public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
     private DeliveryPromiseServiceClient dpsClient;
     private OrderManipulationAuthorityClient omaClient;
-
+    private ZonedDateTime result = null;
     /**
      * PromiseDao constructor, accepting service clients for DPS and OMA.
      * @param dpsClient DeliveryPromiseServiceClient for DAO to access DPS
@@ -27,7 +27,6 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
         this.dpsClient = dpsClient;
         this.omaClient = omaClient;
     }
-
     /**
      * Returns a list of all Promises associated with the given order item ID.
      * @param customerOrderItemId the order item ID to fetch promise for
@@ -37,9 +36,7 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
     public List<Promise> get(String customerOrderItemId) {
         // Fetch the delivery date, so we can add to any promises that we find
         ZonedDateTime itemDeliveryDate = getDeliveryDateForOrderItem(customerOrderItemId);
-
         List<Promise> promises = new ArrayList<>();
-
         // fetch Promise from Delivery Promise Service. If exists, add to list of Promises to return.
         // Set delivery date
         Promise dpsPromise = dpsClient.getDeliveryPromiseByOrderItemId(customerOrderItemId);
@@ -47,35 +44,26 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
             dpsPromise.setDeliveryDate(itemDeliveryDate);
             promises.add(dpsPromise);
         }
-
         return promises;
     }
-
-    /*
+    /**
      * Fetches the delivery date of the shipment containing the order item specified by the given order item ID,
      * if there is one.
-     *
      * If the order item ID doesn't correspond to a valid order item, or if the shipment hasn't been delivered
      * yet, return null.
      */
     private ZonedDateTime getDeliveryDateForOrderItem(String customerOrderItemId) {
         OrderResultItem orderResultItem = omaClient.getCustomerOrderItemByOrderItemId(customerOrderItemId);
-
-        if (null == orderResultItem) {
-            return null;
-        }
-
+        if (orderResultItem == null) { return result; }
         OrderResult orderResult = omaClient.getCustomerOrderByOrderId(orderResultItem.getOrderId());
-
         for (OrderShipment shipment : orderResult.getOrderShipmentList()) {
             for (OrderShipment.ShipmentItem shipmentItem : shipment.getCustomerShipmentItems()) {
                 if (shipmentItem.getCustomerOrderItemId().equals(customerOrderItemId)) {
-                    return shipment.getDeliveryDate();
+                    result = shipment.getDeliveryDate();
+                    break;
                 }
             }
         }
-
-        // didn't find a delivery date!
-        return null;
+        return result;
     }
 }
