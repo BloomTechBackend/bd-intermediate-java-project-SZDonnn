@@ -54,7 +54,9 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
      */
     private ZonedDateTime getDeliveryDateForOrderItem(String customerOrderItemId) {
         OrderResultItem orderResultItem = omaClient.getCustomerOrderItemByOrderItemId(customerOrderItemId);
-        if (orderResultItem == null) { return result; }
+        if (orderResultItem == null) {
+            return result;
+        }
         OrderResult orderResult = omaClient.getCustomerOrderByOrderId(orderResultItem.getOrderId());
         for (OrderShipment shipment : orderResult.getOrderShipmentList()) {
             for (OrderShipment.ShipmentItem shipmentItem : shipment.getCustomerShipmentItems()) {
