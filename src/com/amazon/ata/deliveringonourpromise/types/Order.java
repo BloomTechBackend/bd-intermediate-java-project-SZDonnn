@@ -30,6 +30,7 @@ import java.util.List;
  * * shipOption: which shipping option the customer selected for this order
  * * orderDate: the timestamp of when the order was placed
  */
+
 public class Order {
     private final String orderId;
     private final String customerId;
@@ -57,7 +58,9 @@ public class Order {
         return new Builder();
     }
 
-    public String getOrderId() { return orderId; }
+    public String getOrderId() {
+        return orderId;
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -67,7 +70,9 @@ public class Order {
         return marketplaceId;
     }
 
-    public OrderCondition getCondition() { return condition; }
+    public OrderCondition getCondition() {
+        return condition;
+    }
 
     /**
      * Returns a list containing all the order items in this order.

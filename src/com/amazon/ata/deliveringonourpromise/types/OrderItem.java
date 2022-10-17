@@ -153,24 +153,12 @@ public class OrderItem {
         }
 
         public Builder withAsin(final String asin) {
-            try {
-                if (asin != null) {
-                    this.asin = asin;
-                }
-            } catch (IllegalStateException e) {
-                throw new NullPointerException();
-            }
+            this.asin = asin;
             return this;
         }
 
         public Builder withMerchantId(final String merchantId) {
-            try {
-                if (merchantId != null) {
-                    this.merchantId = merchantId;
-                }
-            } catch (NullPointerException e) {
-                throw new NullPointerException();
-            }
+            this.merchantId = merchantId;
             return this;
         }
 
@@ -202,6 +190,8 @@ public class OrderItem {
          *
          * @return OrderItem constructed according to the
          */
-        public OrderItem build() { return new OrderItem(this); }
+        public OrderItem build() {
+            return new OrderItem(this);
+        }
     }
 }
