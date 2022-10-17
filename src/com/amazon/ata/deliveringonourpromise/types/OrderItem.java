@@ -28,17 +28,26 @@ import java.util.Objects;
  *
  */
 public class OrderItem {
-    private String customerOrderItemId;
-    private String orderId;
-    private String asin;
-    private String merchantId;
-    private int quantity;
-    private String title;
-    private boolean isConfidenceTracked;
-    private int confidence;
+    private final String customerOrderItemId;
+    private final String orderId;
+    private final String asin;
+    private final String merchantId;
+    private final int quantity;
+    private final String title;
+    private final boolean isConfidenceTracked;
+    private final int confidence;
 
     // for Builder's eyes only.
-    private OrderItem() { }
+    OrderItem(Builder builder) {
+        this.customerOrderItemId = builder.customerOrderItemId;
+        this.orderId = builder.orderId;
+        this.asin = builder.asin;
+        this.merchantId = builder.merchantId;
+        this.quantity = builder.quantity;
+        this.title = builder.title;
+        this.isConfidenceTracked = builder.isConfidenceTracked;
+        this.confidence = builder.confidence;
+    }
 
     /**
      * Returns a builder suitable for constructing an OrderItem.
@@ -133,42 +142,54 @@ public class OrderItem {
 
         //CHECKSTYLE:OFF:HiddenField
         //CHECKSTYLE:OFF:JavadocMethod
-        public Builder withCustomerOrderItemId(String customerOrderItemId) {
+        public Builder withCustomerOrderItemId(final String customerOrderItemId) {
             this.customerOrderItemId = customerOrderItemId;
             return this;
         }
 
-        public Builder withOrderId(String orderId) {
+        public Builder withOrderId(final String orderId) {
             this.orderId = orderId;
             return this;
         }
 
-        public Builder withAsin(String asin) {
-            this.asin = asin;
+        public Builder withAsin(final String asin) {
+            try {
+                if (asin != null) {
+                    this.asin = asin;
+                }
+            } catch (IllegalStateException e) {
+                throw new NullPointerException();
+            }
             return this;
         }
 
-        public Builder withMerchantId(String merchantId) {
-            this.merchantId = merchantId;
+        public Builder withMerchantId(final String merchantId) {
+            try {
+                if (merchantId != null) {
+                    this.merchantId = merchantId;
+                }
+            } catch (NullPointerException e) {
+                throw new NullPointerException();
+            }
             return this;
         }
 
-        public Builder withQuantity(int quantity) {
+        public Builder withQuantity(final int quantity) {
             this.quantity = quantity;
             return this;
         }
 
-        public Builder withTitle(String title) {
+        public Builder withTitle(final String title) {
             this.title = title;
             return this;
         }
 
-        public Builder withIsConfidenceTracked(boolean isConfidenceTracked) {
+        public Builder withIsConfidenceTracked(final boolean isConfidenceTracked) {
             this.isConfidenceTracked = isConfidenceTracked;
             return this;
         }
 
-        public Builder withConfidence(int confidence) {
+        public Builder withConfidence(final int confidence) {
             this.confidence = confidence;
             return this;
         }
@@ -181,18 +202,6 @@ public class OrderItem {
          *
          * @return OrderItem constructed according to the
          */
-        public OrderItem build() {
-            OrderItem orderItem = new OrderItem();
-            orderItem.customerOrderItemId = customerOrderItemId;
-            orderItem.orderId = orderId;
-            orderItem.asin = asin;
-            orderItem.merchantId = merchantId;
-            orderItem.quantity = quantity;
-            orderItem.title = title;
-            orderItem.isConfidenceTracked = isConfidenceTracked;
-            orderItem.confidence = confidence;
-
-            return orderItem;
-        }
+        public OrderItem build() { return new OrderItem(this); }
     }
 }

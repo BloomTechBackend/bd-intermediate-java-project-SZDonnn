@@ -31,15 +31,23 @@ import java.util.List;
  * * orderDate: the timestamp of when the order was placed
  */
 public class Order {
-    public String orderId;
-    public String customerId;
-    public String marketplaceId;
-    public OrderCondition condition;
-    public List<OrderItem> customerOrderItemList = new ArrayList<>();
-    public String shipOption;
-    public ZonedDateTime orderDate;
+    private final String orderId;
+    private final String customerId;
+    private final String marketplaceId;
+    private final OrderCondition condition;
+    private final List<OrderItem> customerOrderItemList;
+    private final String shipOption;
+    private final ZonedDateTime orderDate;
 
-    private Order() { }
+    Order(Builder builder) {
+        this.orderId = builder.orderId;
+        this.customerId = builder.customerId;
+        this.marketplaceId = builder.marketplaceId;
+        this.condition = builder.condition;
+        this.customerOrderItemList = builder.customerOrderItemList;
+        this.shipOption = builder.shipOption;
+        this.orderDate = builder.orderDate;
+    }
 
     /**
      * Returns a new Order.Builder object for constructing an Order.
@@ -49,9 +57,7 @@ public class Order {
         return new Builder();
     }
 
-    public String getOrderId() {
-        return orderId;
-    }
+    public String getOrderId() { return orderId; }
 
     public String getCustomerId() {
         return customerId;
@@ -61,9 +67,7 @@ public class Order {
         return marketplaceId;
     }
 
-    public OrderCondition getCondition() {
-        return condition;
-    }
+    public OrderCondition getCondition() { return condition; }
 
     /**
      * Returns a list containing all the order items in this order.
@@ -71,7 +75,21 @@ public class Order {
      * @return a list containing all the order items in this order
      */
     public List<OrderItem> getCustomerOrderItemList() {
-        return customerOrderItemList;
+        List<OrderItem> copies = new ArrayList<>(customerOrderItemList.size());
+        for (int i = 0; i < customerOrderItemList.size(); i++) {
+            copies.add(i, new OrderItem.Builder()
+                    .withCustomerOrderItemId(customerOrderItemList.get(i).getCustomerOrderItemId())
+                    .withOrderId(customerOrderItemList.get(i).getOrderId())
+                    .withAsin(customerOrderItemList.get(i).getAsin())
+                    .withMerchantId(customerOrderItemList.get(i).getMerchantId())
+                    .withQuantity(customerOrderItemList.get(i).getQuantity())
+                    .withTitle(customerOrderItemList.get(i).getTitle())
+                    .withIsConfidenceTracked(customerOrderItemList.get(i).isConfidenceTracked())
+                    .withConfidence(customerOrderItemList.get(i).getConfidence())
+                    .build()
+            );
+        }
+        return copies;
     }
 
     public String getShipOption() {
@@ -95,7 +113,6 @@ public class Order {
                '}';
     }
 
-
     /**
      * Builder for Orders. See Order documentation.
      */
@@ -110,22 +127,22 @@ public class Order {
 
         //CHECKSTYLE:OFF:HiddenField
         //CHECKSTYLE:OFF:JavadocMethod
-        public Builder withOrderId(String orderId) {
+        public Builder withOrderId(final String orderId) {
             this.orderId = orderId;
             return this;
         }
 
-        public Builder withCustomerId(String customerId) {
+        public Builder withCustomerId(final String customerId) {
             this.customerId = customerId;
             return this;
         }
 
-        public Builder withMarketplaceId(String marketplaceId) {
+        public Builder withMarketplaceId(final String marketplaceId) {
             this.marketplaceId = marketplaceId;
             return this;
         }
 
-        public Builder withCondition(OrderCondition condition) {
+        public Builder withCondition(final OrderCondition condition) {
             this.condition = condition;
             return this;
         }
@@ -136,17 +153,31 @@ public class Order {
          * @param customerOrderItemList {@code List<OrderItem>} containing the order items to add to the order
          * @return updated Builder
          */
-        public Builder withCustomerOrderItemList(List<OrderItem> customerOrderItemList) {
-            this.customerOrderItemList = customerOrderItemList;
+        public Builder withCustomerOrderItemList(final List<OrderItem> customerOrderItemList) {
+            List<OrderItem> copies = new ArrayList<>(customerOrderItemList.size());
+            for (int i = 0; i < customerOrderItemList.size(); i++) {
+                copies.add(i, new OrderItem.Builder()
+                    .withCustomerOrderItemId(customerOrderItemList.get(i).getCustomerOrderItemId())
+                    .withOrderId(customerOrderItemList.get(i).getOrderId())
+                    .withAsin(customerOrderItemList.get(i).getAsin())
+                    .withMerchantId(customerOrderItemList.get(i).getMerchantId())
+                    .withQuantity(customerOrderItemList.get(i).getQuantity())
+                    .withTitle(customerOrderItemList.get(i).getTitle())
+                    .withIsConfidenceTracked(customerOrderItemList.get(i).isConfidenceTracked())
+                    .withConfidence(customerOrderItemList.get(i).getConfidence())
+                    .build()
+                );
+            }
+            this.customerOrderItemList = copies;
             return this;
         }
 
-        public Builder withShipOption(String shipOption) {
+        public Builder withShipOption(final String shipOption) {
             this.shipOption = shipOption;
             return this;
         }
 
-        public Builder withOrderDate(ZonedDateTime orderDate) {
+        public Builder withOrderDate(final ZonedDateTime orderDate) {
             this.orderDate = orderDate;
             return this;
         }
@@ -159,17 +190,7 @@ public class Order {
          * @return constructed Order object
          */
         public Order build() {
-            Order order = new Order();
-
-            order.orderId = orderId;
-            order.customerId = customerId;
-            order.marketplaceId = marketplaceId;
-            order.condition = condition;
-            order.customerOrderItemList = customerOrderItemList;
-            order.shipOption = shipOption;
-            order.orderDate = orderDate;
-
-            return order;
+            return new Order(this);
         }
     }
 }

@@ -59,7 +59,6 @@ public class GetPromiseHistoryByOrderIdActivity {
                 history.addPromise(promise);
             }
         }
-
         return history;
     }
 }
