@@ -99,6 +99,7 @@ public class MasteryTaskFourTests {
                 ofsClientClassInterfaces[0] == dpsClientClassInterfaces[0],
             "Expected Promise clients classes to be polymorphically interchangeable!");
 
+
         Method[] promiseClientMethods = ofsClientClassInterfaces[0].getMethods();
 
         assertTrue(1 == promiseClientMethods.length,
