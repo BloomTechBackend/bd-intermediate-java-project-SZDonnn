@@ -54,29 +54,35 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
      */
     @Override
     public List<Promise> get(String customerOrderItemId) {
-        // fetch Promise from Delivery Promise Service. If exists, add to list of Promises to return.
-        // DeliveryPromiseServiceClient
-        for (DeliveryPromiseServiceClient dpsClient : dpsClients) {
-            Promise promise = dpsClient.getPromiseByOrderItemId(customerOrderItemId);
-            isPromiseValid(promise, customerOrderItemId);
-        }
+        if (customerOrderItemId == null || customerOrderItemId.equalsIgnoreCase("")) {
+            throw new NullPointerException("Order Item id could not be null or empty.");
+        } else {
+            // fetch Promise from Delivery Promise Service. If exists, add to list of Promises to return.
+            // DeliveryPromiseServiceClient
+            for (DeliveryPromiseServiceClient dpsClient : dpsClients) {
+                Promise promise = dpsClient.getPromiseByOrderItemId(customerOrderItemId);
+                if (promise != null) {
+                    isPromiseValid(promise, customerOrderItemId);
+                }
+            }
 
-        // fetch Promise from OrderFulfillment Promise Service. If exists, add to list of Promises to return.
-        // OrderFulfillmentServiceClient
-        for (OrderFulfillmentServiceClient ofsClient : ofsClients) {
-            Promise promise = ofsClient.getPromiseByOrderItemId(customerOrderItemId);
-            isPromiseValid(promise, customerOrderItemId);
+            // fetch Promise from OrderFulfillment Promise Service. If exists, add to list of Promises to return.
+            // OrderFulfillmentServiceClient
+            for (OrderFulfillmentServiceClient ofsClient : ofsClients) {
+                Promise promise = ofsClient.getPromiseByOrderItemId(customerOrderItemId);
+                if (promise != null) {
+                    isPromiseValid(promise, customerOrderItemId);
+                }
+            }
         }
         return promises;
     }
     private void isPromiseValid(Promise promise, String customerOrderItemId) {
         // Fetch the delivery date, so we can add to any promises that we find
         ZonedDateTime itemDeliveryDate = getDeliveryDateForOrderItem(customerOrderItemId);
-        if (promise != null) {
-            // Set delivery date
-            promise.setDeliveryDate(itemDeliveryDate);
-            promises.add(promise);
-        }
+        // Set delivery date
+        promise.setDeliveryDate(itemDeliveryDate);
+        promises.add(promise);
     }
 
     /**
