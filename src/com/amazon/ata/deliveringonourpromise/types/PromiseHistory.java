@@ -50,7 +50,7 @@ public class PromiseHistory {
      * @return the promises
      */
     public List<Promise> getPromises() {
-        Comparator<Promise> promiseComparator= new PromiseAsinComparator();
+        Comparator<Promise> promiseComparator = new PromiseAsinComparator();
         promises.sort(promiseComparator);
         return new ArrayList<>(promises);
     }
