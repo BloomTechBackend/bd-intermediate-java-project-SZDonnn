@@ -40,23 +40,20 @@ public class GetPromiseHistoryByOrderIdActivity {
         }
 
         Order order = orderDao.get(orderId);
+        PromiseHistory history = new PromiseHistory(order);
 
         List<OrderItem> customerOrderItems = null;
         if (order != null) {
             customerOrderItems = order.getCustomerOrderItemList();
         }
 
-        OrderItem customerOrderItem = null;
         if (customerOrderItems != null && !customerOrderItems.isEmpty()) {
-            customerOrderItem = customerOrderItems.get(0);
-        }
-
-        PromiseHistory history = new PromiseHistory(order);
-        if (customerOrderItem != null) {
-            List<Promise> promises = promiseDao.get(customerOrderItem.getCustomerOrderItemId());
-            for (Promise promise : promises) {
-                promise.setConfidence(customerOrderItem.isConfidenceTracked(), customerOrderItem.getConfidence());
-                history.addPromise(promise);
+            for (OrderItem orderItem : customerOrderItems) {
+                List<Promise> promises = promiseDao.get(orderItem.getCustomerOrderItemId());
+                for (Promise promise : promises) {
+                    promise.setConfidence(orderItem.isConfidenceTracked(), orderItem.getConfidence());
+                    history.addPromise(promise);
+                }
             }
         }
         return history;
