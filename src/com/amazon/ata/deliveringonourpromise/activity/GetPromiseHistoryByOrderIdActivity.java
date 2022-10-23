@@ -47,7 +47,7 @@ public class GetPromiseHistoryByOrderIdActivity {
         }
 
         PromiseHistory history = new PromiseHistory(order);
-        OrderItem customerOrderItem = null;
+        OrderItem customerOrderItem;
         if (customerOrderItems != null && !customerOrderItems.isEmpty()) {
             for (int i = 1; i < customerOrderItems.size(); i++) {
                 customerOrderItem = customerOrderItems.get(i);
